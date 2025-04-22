@@ -19,6 +19,11 @@ Vagrant.configure("2") do |config|
         machine.vm.synced_folder "./shared", "/vagrant/shared"
       end
 
+      machine.vm.provider :virtualbox do |provider|
+        provider.cpus = 1
+        provider.memory = 1024
+      end
+
       # if the machine is kquetat-S, install k3s as master
       if machine_name == "kquetat-S"
         machine.vm.provision "shell",
@@ -52,11 +57,6 @@ Vagrant.configure("2") do |config|
             curl -sfL https://get.k3s.io | K3S_URL=https://#{machines["kquetat-S"]}:6443 K3S_TOKEN=$TOKEN sh -
             echo "K3s installed on #{machine_name}."
           END
-      end
-
-      machine.vm.provider :virtualbox do |provider|
-        provider.cpus = 1
-        provider.memory = 512
       end
     end
   end
